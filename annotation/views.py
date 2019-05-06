@@ -13,9 +13,6 @@ import sys
 @csrf_exempt
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def scorePage(request):
-	# if	User.objects.all().first() is None:
-	# 	return HttpResponseRedirect('/userdetails')
-	# else:
 		return render(request, 'score.html')
 
 
@@ -37,10 +34,11 @@ def mainPage(request):
 @csrf_exempt
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def sendNewVideo(request):
+	u = User.objects.all().first()
 	pending = Guess.objects.filter(guess="")
 	video = pending.first()
 	if video is not None:
-		return JsonResponse({'bvhPath': video.file.path, 'o1': video.file.option1, 'o2': video.file.option2, 'o3': video.file.option3, 'o4': video.file.option4})
+		return JsonResponse({'bvhPath': video.file.path, 'o1': video.file.option1, 'o2': video.file.option2, 'o3': video.file.option3, 'o4': video.file.option4, 'correct': u.score, 'total': Guess.objects.count()-1})
 	else:
 		done = Guess.objects.exclude(guess="").values('file')
 		possible = BVH.objects.exclude(pk__in=done)
@@ -49,7 +47,7 @@ def sendNewVideo(request):
 			return HttpResponse('/score',status=404)
 
 		Guess.objects.create(file=video)
-		return JsonResponse({'bvhPath': video.path, 'o1': video.option1, 'o2': video.option2, 'o3': video.option3, 'o4': video.option4})
+		return JsonResponse({'bvhPath': video.path, 'o1': video.option1, 'o2': video.option2, 'o3': video.option3, 'o4': video.option4, 'correct': u.score, 'total': Guess.objects.count()-1})
 
 @csrf_exempt
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)

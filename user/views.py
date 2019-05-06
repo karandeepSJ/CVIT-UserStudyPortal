@@ -17,8 +17,9 @@ def infoform(request):
 @csrf_exempt
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def getDet(request):
-	name = request.POST.get('name')
-	age = request.POST.get('age')
-	aff = request.POST.get('aff')
-	user = User.objects.create(name=request.user, age=age, aff=aff)
+	name = request.POST.get('name','')
+	age = request.POST.get('age','')
+	aff = request.POST.get('aff','')
+	gender = request.POST.get('gender','')
+	user = User.objects.create(name=name, age=age, aff=aff, gender=gender)
 	return HttpResponse('/')

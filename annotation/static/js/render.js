@@ -83,7 +83,7 @@ function animate() {
 
 	if(!pause) {
 		var delta = clock.getDelta();
-		document.getElementById("time").innerHTML = "Time left: " + Math.min(30, parseInt(clock.elapsedTime - pause_time)) + "/30 seconds"
+		document.getElementById("time").innerHTML = "Time left: " + (30 - Math.min(30, parseInt(clock.elapsedTime - pause_time))) + " seconds"
 
 		if ( mixer ) mixer.update( delta );
 
@@ -162,6 +162,7 @@ function abc(){
 			$('#option2').val(response.o2);
 			$('#option3').val(response.o3);
 			$('#option4').val(response.o4);
+			$('#score').html("Score: " + response.correct + '/' + response.total);
 		},
 		error: function(response){
 			window.location = response.responseText;

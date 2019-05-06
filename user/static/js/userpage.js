@@ -9,6 +9,7 @@ function submitUD() {
 	name = $('#name').val();
 	age = $('#age').val();
 	aff = $('#aff').val();
+	gender = $('#gender').val();
 	$.ajax({
 		url: 'getdet',
 		type: 'POST',
@@ -16,6 +17,7 @@ function submitUD() {
 			'name': name,
 			'age': age,
 			'aff': aff,
+			'gender': gender,
 		},
 		success: function(response){
 			window.location=response;
