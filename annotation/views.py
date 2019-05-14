@@ -85,4 +85,4 @@ def submitAnnotation(request):
 		u.score += 1
 		u.save()
 	v.save()
-	return HttpResponse(status=200)
+	return JsonResponse({'correctAnswer':v.file.action, 'status':guess == v.file.action})

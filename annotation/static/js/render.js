@@ -139,10 +139,28 @@ function subForm()
 			'num_replay': replays,
 		},
 		success: function(response){
-			on();
+			if (response.status)
+				$('.' + sel.replace(' ','_')).css('color','green');
+			else
+			{
+				$('.' + sel.replace(' ','_')).css('color','red');
+				$('.' + response.correctAnswer.replace(' ','_')).css('color','green');
+			}
+			var timeleft = 1;
+			pause = true;
+			var ttt = setInterval(function(){
+			  timeleft -= 1;
+			  if(timeleft<=0){
+			  	on();
+			  }
+
+			  else if(timeleft <= -1){
+			    clearInterval(timer);
+			  }
+			}, 1000);
 		},
 		error: function(response){
-			location.reload()
+			location.reload();
 		}
 	})
 }
@@ -158,6 +176,10 @@ function abc(){
 			$('#o2').html(response.o2);
 			$('#o3').html(response.o3);
 			$('#o4').html(response.o4);
+			$('#o1').addClass(response.o1.replace(' ', '_'));
+			$('#o2').addClass(response.o2.replace(' ', '_'));
+			$('#o3').addClass(response.o3.replace(' ', '_'));
+			$('#o4').addClass(response.o4.replace(' ', '_'));
 			$('#option1').val(response.o1);
 			$('#option2').val(response.o2);
 			$('#option3').val(response.o3);
