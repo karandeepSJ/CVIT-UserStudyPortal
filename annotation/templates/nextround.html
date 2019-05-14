@@ -14,7 +14,7 @@
 
       <!-- Compiled and minified JavaScript -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src='{% static "js/score.js" %}'></script>
+    <script src='{% static "js/nextround.js" %}'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
 
@@ -23,8 +23,19 @@
   </head>
   <body style="background-color: white;">
     <div id="container">
-      <h1 class="teal-text"> Wow! You have completed the game! You guessed <span id='correct'></span>/<span id='total'></span> correctly</h1> 
-      <iframe src="https://giphy.com/embed/MhHXeM4SpKrpC" width="480" height="269" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+      <h3 class="teal-text"> YAY! You completed round <span id='roundnumber'></span>!
+        <br/>
+        Your current score is <span id='correct'></span>/<span id='total'></span>.
+      </h3>
+      <iframe src="https://giphy.com/embed/11sBLVxNs7v6WA" width="480" height="217" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+      <h4 class="teal-text">
+        Press the button below to continue to the next round
+      </h4>
+      <form action="/">
+        <div class="input-field">
+        <input type="submit" class="btn" value = "Proceed">
+        </div>  
+      </form>
     </div>
 
   </body>

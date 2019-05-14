@@ -163,6 +163,11 @@ function abc(){
 			$('#option3').val(response.o3);
 			$('#option4').val(response.o4);
 			$('#score').html("Score: " + response.correct + '/' + response.total);
+			curr_round = Math.floor(response.total/5)
+			if(response.total%5==0 && curr_round==response.round)
+			{
+				window.location = 'nextround';
+			}
 		},
 		error: function(response){
 			window.location = response.responseText;

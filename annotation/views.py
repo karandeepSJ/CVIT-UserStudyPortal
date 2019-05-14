@@ -18,9 +18,28 @@ def scorePage(request):
 
 @csrf_exempt
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def nextRoundPage(request):
+	if	User.objects.all().first() is None:
+		return HttpResponseRedirect('/userdetails')
+	else:
+		u = User.objects.all().first()
+		u.current_round = (Guess.objects.count()-1)/5 + 1
+		u.save()
+		return render(request, 'nextround.html')
+
+
+@csrf_exempt
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def score(request):
 	u = User.objects.all().first()
 	return JsonResponse({'score':u.score, 'total':BVH.objects.count()})
+
+
+@csrf_exempt
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def score2(request):
+	u = User.objects.all().first()
+	return JsonResponse({'score':u.score, 'total':Guess.objects.count()-1})
 
 
 @csrf_exempt
@@ -38,7 +57,7 @@ def sendNewVideo(request):
 	pending = Guess.objects.filter(guess="")
 	video = pending.first()
 	if video is not None:
-		return JsonResponse({'bvhPath': video.file.path, 'o1': video.file.option1, 'o2': video.file.option2, 'o3': video.file.option3, 'o4': video.file.option4, 'correct': u.score, 'total': Guess.objects.count()-1})
+		return JsonResponse({'bvhPath': video.file.path, 'o1': video.file.option1, 'o2': video.file.option2, 'o3': video.file.option3, 'o4': video.file.option4, 'correct': u.score, 'total': Guess.objects.count()-1, 'round':u.current_round})
 	else:
 		done = Guess.objects.exclude(guess="").values('file')
 		possible = BVH.objects.exclude(pk__in=done)
@@ -47,7 +66,7 @@ def sendNewVideo(request):
 			return HttpResponse('/score',status=404)
 
 		Guess.objects.create(file=video)
-		return JsonResponse({'bvhPath': video.path, 'o1': video.option1, 'o2': video.option2, 'o3': video.option3, 'o4': video.option4, 'correct': u.score, 'total': Guess.objects.count()-1})
+		return JsonResponse({'bvhPath': video.path, 'o1': video.option1, 'o2': video.option2, 'o3': video.option3, 'o4': video.option4, 'correct': u.score, 'total': Guess.objects.count()-1, 'round':u.current_round})
 
 @csrf_exempt
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
