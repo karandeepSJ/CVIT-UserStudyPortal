@@ -16,9 +16,50 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
+      .tooltip {
+          position: relative;
+          display: inline-block;
+          border-bottom: 1px dotted black;
+        }
 
+        .tooltip .tooltiptext {
+          visibility: hidden;
+          width: 120px;
+          background-color: #555;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px 0;
+          position: absolute;
+          z-index: 1;
+          bottom: 125%;
+          left: 50%;
+          margin-left: -60px;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+
+        .tooltip .tooltiptext::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: #555 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+          visibility: visible;
+          opacity: 1;
+        }
     </style>
-
+    <script> 
+      function displayTnC() {
+        alert("Clicking on 'SUBMIT' indicates your consent for sharing information you provide and responses in the sessions you participate in.\n  All information you provide is considered completely confidential. Your name and any identifying information will not appear in any publication resulting from this study. \n  Data collected during this study will be retained indefinitely in locked drawers or on password protected computers in a secure location accessible only to researchers associated with this project.\n  Electronic data will be de-identified before being stored. Thank you for your assistance in this project.");  
+      }
+    </script>  
   </head>
   <body style="background-color: white;">
     <div id="info">
@@ -63,12 +104,18 @@
                   <option value="Prefer not to say">Prefer not to say</option>
                 </select>
             </p>
-
+              
         </div>
 
         <div class="input-field">
           <input type="submit" class="btn" id="submit_button" value = "Submit">
         </div>  
+        <p>
+          <label onclick="displayTnC()" >
+            <!-- <input id="TnC" type="checkbox" unchecked /> -->
+            <span class='TnC' style="display: unset; width: 20%;" >Terms & Conditions </span>
+          </label>
+        </p>
       </form>
     </div>
 

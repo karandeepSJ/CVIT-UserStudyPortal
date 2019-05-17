@@ -11,32 +11,47 @@ var replays = 0;
 init();
 animate();
 
-var loader = new THREE.BVHLoader();
+var bvhLoader = new THREE.BVHLoader();
+var fbxLoader = new THREE.FBXLoader();
 var boneContainer = new THREE.Group();
+
+function load_fbx(filename) {
+	console.log("loading fbx: start")
+	fbxLoader.load('/media/' + filename, function(result) {
+		mixer = new THREE.AnimationMixer( result );
+		var action = mixer.clipAction( result.animations[ 0 ] );
+		action.play();
+		result.traverse( function ( child ) {
+			if ( child.isMesh ) {
+				child.castShadow = true;
+				child.receiveShadow = true;
+			}
+		} );
+		scene.add( result );		
+
+	}, console.log, console.log);
+}
 
 function load_bvh(filename){
 
 	// Load predicted bvh file
-	loader.load( '/media/' + filename, function ( result ) {
+	bvhLoader.load( '/media/' + filename, function ( result ) {
+		skeletonHelper = new THREE.SkeletonHelper( result.skeleton.bones[ 0 ] );
+		skeletonHelper.skeleton = result.skeleton; // allow animation mixer to bind to SkeletonHelper directly
 
-	skeletonHelper = new THREE.SkeletonHelper( result.skeleton.bones[ 0 ] );
-	skeletonHelper.skeleton = result.skeleton; // allow animation mixer to bind to SkeletonHelper directly
+		
+		boneContainer.add( result.skeleton.bones[ 0 ] );
 
-	
-	boneContainer.add( result.skeleton.bones[ 0 ] );
+		scene.add( skeletonHelper );
+		scene.add( boneContainer );
 
-	scene.add( skeletonHelper );
-	scene.add( boneContainer );
-
-	// play animation
+		// play animation
 
 		mixer = new THREE.AnimationMixer( skeletonHelper );
 		animation = mixer.clipAction( result.clip )
 		animation.setEffectiveWeight( 1.0 ).play();
-		animation.setLoop(THREE.LoopOnce);}
-	
-
-	 );
+		animation.setLoop(THREE.LoopOnce);
+	});
 
 }
 
@@ -166,36 +181,39 @@ function subForm()
 }
 
 function abc(){
-	$.ajax({
-		url: 'newvideo',
-		type: 'POST',
-		success: function(response){
-			bvh = response.bvhPath;
-			load_bvh(bvh);
-			$('#o1').html(response.o1);
-			$('#o2').html(response.o2);
-			$('#o3').html(response.o3);
-			$('#o4').html(response.o4);
-			$('#o1').addClass(response.o1.replace(' ', '_'));
-			$('#o2').addClass(response.o2.replace(' ', '_'));
-			$('#o3').addClass(response.o3.replace(' ', '_'));
-			$('#o4').addClass(response.o4.replace(' ', '_'));
-			$('#option1').val(response.o1);
-			$('#option2').val(response.o2);
-			$('#option3').val(response.o3);
-			$('#option4').val(response.o4);
-			$('#score').html("Score: " + response.correct + '/' + response.total);
-			curr_round = Math.floor(response.total/5)
-			if(response.total%5==0 && curr_round==response.round)
-			{
-				window.location = 'nextround';
-			}
-		},
-		error: function(response){
-			window.location = response.responseText;
-			// alert("There seems to be some error!")
-		}
-	})
+	// load_fbx('files/fbx_files/ZombieKicking.fbx');
+	load_fbx('files/fbx_files/untitled.fbx');
+	console.log('hello')
+	// $.ajax({
+	// 	url: 'newvideo',
+	// 	type: 'POST',
+	// 	success: function(response){
+	// 		bvh = response.bvhPath;
+	// 		load_bvh(bvh);
+	// 		$('#o1').html(response.o1);
+	// 		$('#o2').html(response.o2);
+	// 		$('#o3').html(response.o3);
+	// 		$('#o4').html(response.o4);
+	// 		$('#o1').addClass(response.o1.replace(' ', '_'));
+	// 		$('#o2').addClass(response.o2.replace(' ', '_'));
+	// 		$('#o3').addClass(response.o3.replace(' ', '_'));
+	// 		$('#o4').addClass(response.o4.replace(' ', '_'));
+	// 		$('#option1').val(response.o1);
+	// 		$('#option2').val(response.o2);
+	// 		$('#option3').val(response.o3);
+	// 		$('#option4').val(response.o4);
+	// 		$('#score').html("Score: " + response.correct + '/' + response.total);
+	// 		curr_round = Math.floor(response.total/5)
+	// 		if(response.total%5==0 && curr_round==response.round)
+	// 		{
+	// 			window.location = 'nextround';
+	// 		}
+	// 	},
+	// 	error: function(response){
+	// 		window.location = response.responseText;
+	// 		// alert("There seems to be some error!")
+	// 	}
+	// })
 
 	$('#formResponse').submit(function(e) {
 		e.preventDefault();
