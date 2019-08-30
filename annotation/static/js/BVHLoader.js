@@ -30,8 +30,9 @@ THREE.BVHLoader.prototype = {
 		loader.load( url, function ( text ) {
 
 			onLoad( scope.parse( text ) );
+			onError( console.log('there is an error') )
 
-		}, onProgress, onError );
+		}, onProgress);
 
 	},
 
